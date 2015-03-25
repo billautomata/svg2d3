@@ -1,0 +1,19 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build_dev": "browserify -d -t brfs main.js -o ../bundle.js &> browserify.log"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "brfs": "^1.4.0",
+    "d3": "^3.5.5",
+    "moment": "^2.9.0",
+    "underscore": "^1.8.2",
+    "xmltojson": "^1.1.0"
+  }
+}
