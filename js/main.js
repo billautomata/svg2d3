@@ -1,31 +1,17 @@
 var d3 = require('d3')
 
-window.svg_text = '<svg width="1003" height="908" \
-  style="background-color: white;"><defs><linearGradient id="gradient0"><stop \
-  offset="94%" stop-color="green" stop-opacity="1"></stop><stop offset="100%" \
-  stop-color="yellow" stop-opacity="1"></stop></linearGradient></defs><g \
-  transform="translate(501.5 454)"><circle cx="0" cy="0" r="401" \
-  fill="url(#gradient0)"></circle></g></svg>'
-
-// window.svg_text = '<svg>' +
-// '<g foo="bar"></g>' +
-// '<g foo="bar"></g>' +
-// '<g foo="bar"></g>' +
-// '<g foo="bar"></g>' +
-// '<q foo="bar"></q>' +
-// '<q foo="bar"></q>' +
-// '<q foo="bar"></q>' +
-// '<q foo="bar"></q>' +
-// '<g foo="bar"></g>' +
-// '</svg>'
-
 window.onload = function(){
+  d3.select('#clicker').on('click',function(){
+    var svgtxt = d3.select('textarea').node().value
+    console.log(svgtxt)
+    created3(svgtxt)
+  })
+}
 
-  d3.select('body').append('div').html('hello world ' + Date.now())
+function created3(svg_text){
 
   window.oParser = new DOMParser()
-  window.oDom = window.oParser.parseFromString(window.svg_text, 'text/xml')
-
+  window.oDom = window.oParser.parseFromString(svg_text, 'text/xml')
 
   var flat_list = []
   recurse(window.oDom, 0)
@@ -51,7 +37,35 @@ window.onload = function(){
     }
   })
 
-  flat_list.forEach(function(e){console.log(e)})
+  var codelines = []
+
+  flat_list.forEach(function(e,idx){
+
+    // generate d3 code
+    // identifier var name is the tagname+idx
+    var identifier = e.tagName+'_'+idx
+    var parent_identifier
+
+    if(e.level > 0){
+      parent_identifier = e.parent_tag + '_' + e.parent_idx
+    } else {
+      parent_identifier = 'container'
+    }
+
+    codelines.push(';var ' + identifier + ' = ' + parent_identifier +'.append(\''+e.tagName+'\')')
+
+    e.attrs.forEach(function(attr){
+      codelines.push('.attr(\'' + attr.name + '\',\'' + attr.value + '\')')
+    })
+
+  })
+
+  // codelines.forEach(function(e){console.log(e)})
+
+  var container = d3.select('body').append('div')
+  eval(codelines.join('\n'))
+
+  d3.select('body').append('div').attr('class','d3code').append('textarea').attr('rows',codelines.length+4).text(codelines.join('\n'))
 
   function recurse(d, level){
 
@@ -73,27 +87,16 @@ window.onload = function(){
         attrs: []
       }
 
-
       for(var j = 0; j < d.children[i].attributes.length; j++){
         var attr = d.children[i].attributes[j]
         console.log('attr=',attr.nodeName,attr.nodeValue)
-
         this_child.attrs.push({name: attr.nodeName, value: attr.nodeValue})
-
       }
 
       flat_list.push(this_child)
 
       recurse(d.children[i], level+1)
     }
-
-
-
-    // d.children.forEach(function(element){
-    //   console.
-    //   recurse(element[0])
-    // })
-
 
   }
 

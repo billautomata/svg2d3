@@ -1,8 +1,62 @@
 <html>
 <head>
+
+  <style>
+
+    #clicker {
+      width: 100px;
+      height: 40px;
+      outline: 1px solid rgba(0,0,0,0.05);
+      cursor: pointer;
+      text-align: center;
+    }
+    #clicker:hover {
+      background-color: rgb(244,244,244);
+    }
+
+    div {
+      font-family: Helvetica;
+      font-weight: 100;
+    }
+
+    textarea {
+      width: 80%;
+      margin-left: 0px;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+
+  </style>
+
 </head>
 
 <body>
+
+  <!-- <input type='textarea' cols=80 rows=20></input> -->
+  <div><h1>svg2d3 alpha</h1></div>
+  <div>
+    <p>Place your svg text in the box below and click submit.</p>
+    <p>Your d3 code will be generated.</p>
+    <p>Then the d3 code will be run to actually render your svg.</p>
+    <p>Finally the code is then appended to the bottom of the page.</p>
+    <p>Please report all bugs to <a href='http://billautomata.github.io/svg2d3/'>github issues</a></p>
+
+  </div>
+  <textarea name="textarea" rows="40" >
+<svg width="1003" height="908" style="background-color: blue;">
+  <defs>
+    <linearGradient id="gradient0">
+      <stop offset="25%" stop-color="green" stop-opacity="1"></stop>
+      <stop offset="100%" stop-color="yellow" stop-opacity="1"></stop>
+    </linearGradient>
+  </defs>
+  <g transform="translate(501.5 454)">
+    <circle cx="0" cy="0" r="401" fill="url(#gradient0)"></circle>
+  </g>
+</svg>
+  </textarea>
+  <div><button id='clicker'>submit</button></div>
+
 </body>
 
 <script src='bundle.js' charset='utf-8'></script>
