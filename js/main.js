@@ -1,5 +1,4 @@
 var d3 = require('d3')
-var xmltojson = require('xmltojson')
 
 window.svg_text = '<svg width="1003" height="908" \
   style="background-color: white;"><defs><linearGradient id="gradient0"><stop \
@@ -8,18 +7,17 @@ window.svg_text = '<svg width="1003" height="908" \
   transform="translate(501.5 454)"><circle cx="0" cy="0" r="401" \
   fill="url(#gradient0)"></circle></g></svg>'
 
-window.svg_text = '<svg>' +
-'<g foo="bar"></g>' +
-'<g foo="bar"></g>' +
-'<g foo="bar"></g>' +
-'<g foo="bar"></g>' +
-'<q foo="bar"></q>' +
-'<q foo="bar"></q>' +
-'<q foo="bar"></q>' +
-'<q foo="bar"></q>' +
-'<g foo="bar"></g>' +
-
-'</svg>'
+// window.svg_text = '<svg>' +
+// '<g foo="bar"></g>' +
+// '<g foo="bar"></g>' +
+// '<g foo="bar"></g>' +
+// '<g foo="bar"></g>' +
+// '<q foo="bar"></q>' +
+// '<q foo="bar"></q>' +
+// '<q foo="bar"></q>' +
+// '<q foo="bar"></q>' +
+// '<g foo="bar"></g>' +
+// '</svg>'
 
 window.onload = function(){
 
@@ -28,71 +26,77 @@ window.onload = function(){
   window.oParser = new DOMParser()
   window.oDom = window.oParser.parseFromString(window.svg_text, 'text/xml')
 
-  // console.log(obj)
 
-  console.log(((xmltojson.parseXML(window.oDom))))
+  var flat_list = []
+  recurse(window.oDom, 0)
 
-  return;
+  console.log(JSON.stringify(flat_list,null,2))
 
-  // crawl array and dump the contents formmated
-  var root = xmltojson.parseXML(window.oDom)
-  recurse(root)
+  flat_list.forEach(function(element,idx,arry){
+    if(element.level > 0){
 
-function recurse(root){
+      // move from the current index to zero
+      // until you find an element whose level is 1 less than yours
 
-  // console.log(Object.keys(root))
+      console.log(element)
+      console.log(idx)
 
-  Object.keys(root).forEach(function(element_name){
-
-    var tag = element_name
-    var element = root[tag]
-    if(element === null){return;}
-
-    // console.log('key: ' + element_name)
-    // console.log('element: ' + element)
-
-    // console.log('How many children: '+ element.length)
-
-    if(element.length > 0){
-
-      recurse(element)
-
-    } else {
-
-      // console.log('no children')
-      // console.log(Object.keys(element))
-
-      Object.keys(element).forEach(function(key_name){
-
-
-        if(element[key_name].length > 0){
-          // console.log('hhhh')
-          element.__tag = key_name
-          recurse(element[key_name])
-        } else {
-          console.log(element)
-          console.log(key_name)
-          // console.log(element[key_name].length)
+      for(var crawl_idx = idx; crawl_idx >= 0; crawl_idx--){
+        if(arry[crawl_idx].level < element.level){
+          element.parent_idx = crawl_idx
+          element.parent_tag = arry[crawl_idx].tagName
+          crawl_idx = -1
         }
+      }
+    }
+  })
+
+  flat_list.forEach(function(e){console.log(e)})
+
+  function recurse(d, level){
+
+    // console.log(typeof d)
+    // console.log(d.length)
+    // console.log(Object.keys(d))
+    // console.log(d)
+    // console.log(d.children.length)
+
+    for(var i = 0; i < d.children.length; i++){
+      // console.log(d.children[i])
+      // console.log(d.children[i].attributes)
+
+      console.log(level, d.children[i].tagName)
+
+      var this_child = {
+        level: level,
+        tagName: d.children[i].tagName,
+        attrs: []
+      }
 
 
-      })
+      for(var j = 0; j < d.children[i].attributes.length; j++){
+        var attr = d.children[i].attributes[j]
+        console.log('attr=',attr.nodeName,attr.nodeValue)
 
-      // // does this tag have any attributes?
-      // var attributes_present = (element._attr === undefined)
-      //
-      // if(attributes_present){
-      //   console.log(Object.keys(element._attr))
-      // }
+        this_child.attrs.push({name: attr.nodeName, value: attr.nodeValue})
+
+      }
+
+      flat_list.push(this_child)
+
+      recurse(d.children[i], level+1)
     }
 
 
 
+    // d.children.forEach(function(element){
+    //   console.
+    //   recurse(element[0])
+    // })
 
-    //recurse(root[element_name])
 
+  }
 
-  })
-}
+  return;
 
 }
