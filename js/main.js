@@ -16,7 +16,7 @@ function created3(svg_text){
   var flat_list = []
   recurse(window.oDom, 0)
 
-  console.log(JSON.stringify(flat_list,null,2))
+  // console.log(JSON.stringify(flat_list,null,2))
 
   flat_list.forEach(function(element,idx,arry){
     if(element.level > 0){
@@ -75,6 +75,13 @@ function created3(svg_text){
     // console.log(d)
     // console.log(d.children.length)
 
+    if(d.childNodes){
+      d.children = d.childNodes
+    }
+
+    console.log('child')
+    console.log(d.children)
+
     for(var i = 0; i < d.children.length; i++){
       // console.log(d.children[i])
       // console.log(d.children[i].attributes)
@@ -87,15 +94,18 @@ function created3(svg_text){
         attrs: []
       }
 
-      for(var j = 0; j < d.children[i].attributes.length; j++){
-        var attr = d.children[i].attributes[j]
-        console.log('attr=',attr.nodeName,attr.nodeValue)
-        this_child.attrs.push({name: attr.nodeName, value: attr.nodeValue})
+      if(d.children[i].attributes !== undefined){
+        for(var j = 0; j < d.children[i].attributes.length; j++){
+          var attr = d.children[i].attributes[j]
+          console.log('attr=',attr.nodeName,attr.nodeValue)
+          this_child.attrs.push({name: attr.nodeName, value: attr.nodeValue})
+        }
       }
 
       flat_list.push(this_child)
 
       recurse(d.children[i], level+1)
+
     }
 
   }
