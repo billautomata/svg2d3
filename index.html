@@ -4,9 +4,10 @@
   <style>
 
     #clicker {
-      width: 100px;
+      width: 120px;
       height: 40px;
-      outline: 1px solid rgba(0,0,0,0.05);
+      outline: 1px solid rgba(0,0,0,0.5);
+      background-color: rgb(244,244,244);
       cursor: pointer;
       text-align: center;
     }
@@ -15,11 +16,15 @@
     }
 
     div {
-      font-family: Helvetica;
+      font-family: sans-serif;
+      font-size: 18px;
       font-weight: 100;
     }
 
     textarea {
+      font-weight: 500;
+      font-size: 14px;
+      font-family: monospace;
       width: 80%;
       margin-left: 0px;
       margin-top: 4px;
@@ -33,29 +38,30 @@
 <body>
 
   <!-- <input type='textarea' cols=80 rows=20></input> -->
-  <div><h1>svg2d3 alpha</h1></div>
+  <div style='text-align: center;'><h1>svg2d3 alpha</h1></div>
   <div>
-    <p>Place your svg text in the box below and click submit.</p>
-    <p>Your d3 code will be generated.</p>
-    <p>Then the d3 code will be run to actually render your svg.</p>
+    <p>Paste your SVG text in the box below and click convert.</p>
+    <p>Your d3.js code will be generated from the SVG data.</p>
+    <p>Then the d3.js code will be run using javascript's <code>eval()</code> method to actually render your svg.</p>
     <p>Finally the code is then appended to the bottom of the page.</p>
     <p>Please report all bugs to <a href='https://github.com/billautomata/svg2d3/'>github issues</a></p>
 
   </div>
-  <textarea name="textarea" rows="40" >
-<svg width="1003" height="908" style="background-color: blue;">
+  <textarea name="textarea" rows="20" >
+<svg width="512" height="512" style="background-color: blue;">
   <defs>
     <linearGradient id="gradient0">
       <stop offset="25%" stop-color="green" stop-opacity="1"></stop>
       <stop offset="100%" stop-color="yellow" stop-opacity="1"></stop>
     </linearGradient>
   </defs>
-  <g transform="translate(501.5 454)">
-    <circle cx="0" cy="0" r="401" fill="url(#gradient0)"></circle>
+  <g transform="translate(256 256)">
+    <circle cx="0" cy="0" r="128" fill="url(#gradient0)"></circle>
   </g>
 </svg>
   </textarea>
-  <div><button id='clicker'>submit</button></div>
+  <div><button id='clicker'>CONVERT</button></div>
+  <hr>
 
 </body>
 
