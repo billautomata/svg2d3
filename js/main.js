@@ -55,7 +55,9 @@ function created3(svg_text){
     codelines.push(';var ' + identifier + ' = ' + parent_identifier +'.append(\''+e.tagName+'\')')
 
     e.attrs.forEach(function(attr){
-      codelines.push('.attr(\'' + attr.name + '\',\'' + attr.value + '\')')
+      if(attr.name !== 'xmlns:xlink'){
+        codelines.push('.attr(\'' + attr.name + '\',\'' + attr.value + '\')')
+      }
     })
 
   })
